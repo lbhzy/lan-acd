@@ -1,0 +1,16 @@
+[package]
+name = "lan_acd"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pnet = "0.35.0"
+clap = { version = "4.5.24", features = ["derive", "color"] }
+anstyle = "1.0.10"
+
+[profile.release]
+opt-level = "z"     # Optimize for size.
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+panic = "abort"     # Abort on panic
+strip = true        # Automatically strip symbols from the binary.
