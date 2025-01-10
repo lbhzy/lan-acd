@@ -29,7 +29,7 @@ fn main() {
     let timeout = Duration::from_millis(args.timeout);
     let index = args.iface.unwrap();
     let interface = pnet::datalink::interfaces()[index].clone();
-    let local_mac = interface.mac.unwrap();
+    let local_mac = interface.mac.expect("mac is none");
     let local_network = interface
         .ips
         .iter()
@@ -37,7 +37,7 @@ fn main() {
             IpNetwork::V4(addr) => Some(addr.clone()),
             IpNetwork::V6(_) => None,
         })
-        .unwrap();
+        .expect("ip is none");
     let local_ip = local_network.ip();
 
     let cfg = pnet::datalink::Config::default();
@@ -179,7 +179,7 @@ fn list_all_interfaces() {
         if cfg!(target_os = "windows") {
             println!("{i}. {:<18} |  {}", network, interface.description);
         } else {
-            println!("{i}. {:^18} |  {}", network, interface.name);
+            println!("{i}. {:<18} |  {}", network, interface.name);
         }
 
         i += 1;
