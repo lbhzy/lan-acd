@@ -1,15 +1,15 @@
-use clap::Parser;
 use anstyle::AnsiColor;
 use clap::builder::styling::Styles;
+use clap::Parser;
 
 const STYLES: Styles = Styles::styled()
-    .header(AnsiColor::Green.on_default())
-    .usage(AnsiColor::Green.on_default())
-    .literal(AnsiColor::Cyan.on_default())
-    .placeholder(AnsiColor::Red.on_default());
+    .header(AnsiColor::BrightGreen.on_default().bold())
+    .usage(AnsiColor::BrightGreen.on_default().bold())
+    .literal(AnsiColor::BrightCyan.on_default())
+    .placeholder(AnsiColor::BrightBlue.on_default());
 
 #[derive(Parser, Debug)]
-#[command(about = "LAN address conflict detection")]
+#[command(about, version)]
 #[command(styles = STYLES)]
 pub struct Cli {
     /// List all interfaces and index
@@ -20,7 +20,7 @@ pub struct Cli {
     #[arg(short, long, required_unless_present = "list")]
     pub iface: Option<usize>,
 
-    /// Scanning ends if no ARP response is received beyond this time (ms)
-    #[arg(short, long, default_value = "1000")]
+    /// Stop if no ARP reply is received after this timeout (ms)
+    #[arg(short, long, default_value = "300")]
     pub timeout: u64,
 }
