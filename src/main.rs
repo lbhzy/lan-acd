@@ -40,8 +40,6 @@ fn main() {
         .unwrap();
     let local_ip = local_network.ip();
 
-    println!("start scanning");
-
     let cfg = pnet::datalink::Config::default();
     let (mut sender, mut receiver) = match pnet::datalink::channel(&interface, cfg) {
         Ok(Channel::Ethernet(tx, rx)) => (tx, rx),
@@ -114,10 +112,16 @@ fn main() {
             }
         };
         devices.push(device);
-        println!("{}\t{}", device.0, device.1);
     }
     devices.push((local_ip, local_mac));
-    println!("{local_ip}\t{local_mac} (local)");
+    devices.sort_by_key(|(ip, _)| *ip);
+    for dev in &devices {
+        if dev.0 == local_ip && dev.1 == local_mac {
+            println!("{}\t{} (local)", dev.0, dev.1);
+        } else {
+            println!("{}\t{}", dev.0, dev.1);
+        }
+    }
     println!("devices count: {}", devices.len());
 
     let mut ip_map = HashMap::new();
