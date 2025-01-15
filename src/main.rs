@@ -46,6 +46,7 @@ fn main() {
         Ok(_) => panic!("Unknown channel type"),
         Err(e) => panic!("Channel error: {e}"),
     };
+    let probe_ip = Ipv4Addr::new(0, 0, 0, 0);
     let (tx, rx) = mpsc::channel();
     // 线程内接收arp回应 通过tx channel将有效(ip, mac)发送出来
     thread::spawn(move || loop {
@@ -64,7 +65,10 @@ fn main() {
         let target_ip = pkt_arp.get_target_proto_addr();
         let target_mac = pkt_arp.get_target_hw_addr();
 
-        if local_network.contains(sender_ip) && target_ip == local_ip && target_mac == local_mac {
+        if local_network.contains(sender_ip)
+            && (target_ip == local_ip || target_ip == probe_ip)
+            && target_mac == local_mac
+        {
             tx.send((sender_ip, sender_mac)).unwrap();
         }
     });
@@ -93,7 +97,7 @@ fn main() {
             pkt_arp.set_sender_hw_addr(local_mac);
             if ip == local_ip {
                 // ARP Probe
-                pkt_arp.set_sender_proto_addr(Ipv4Addr::new(0, 0, 0, 0));
+                pkt_arp.set_sender_proto_addr(probe_ip);
             } else {
                 pkt_arp.set_sender_proto_addr(local_ip);
             }
