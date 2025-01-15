@@ -6,8 +6,11 @@ description = "LAN address conflict detection"
 
 [dependencies]
 pnet = "0.35.0"
-clap = { version = "4.5.24", features = ["derive", "color"] }
+clap = { version = "4.5.26", features = ["derive", "color"] }
 anstyle = "1.0.10"
+
+[build-dependencies]
+chrono = "0.4.39"
 
 [profile.release]
 opt-level = "z"     # Optimize for size.

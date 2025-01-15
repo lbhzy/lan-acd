@@ -9,7 +9,7 @@ const STYLES: Styles = Styles::styled()
     .placeholder(AnsiColor::BrightBlue.on_default());
 
 #[derive(Parser, Debug)]
-#[command(about, version)]
+#[command(about = format!("{} ({})", env!("CARGO_PKG_DESCRIPTION"), env!("BUILD_DATE")))]
 #[command(styles = STYLES)]
 pub struct Cli {
     /// List all interfaces and index
@@ -20,7 +20,7 @@ pub struct Cli {
     #[arg(short, long, required_unless_present = "list")]
     pub iface: Option<usize>,
 
-    /// Stop if no ARP reply is received after this timeout (ms)
+    /// Stop if no ARP reply beyond this time (ms)
     #[arg(short, long, default_value = "300")]
     pub timeout: u64,
 }
