@@ -75,9 +75,7 @@ fn main() {
 
     let mut pkt_buf = [0u8; PKT_ETH_SIZE + PKT_ARP_SIZE];
     for ip in &local_network {
-        if cfg!(target_os = "windows") {
-            std::thread::sleep(Duration::from_micros(10));
-        }
+        std::thread::sleep(Duration::from_micros(1));
         // Use scope blocks so we can reborrow our buffer
         {
             // Build our base ethernet frame
