@@ -230,7 +230,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "lan_acd"
+name = "lan-acd"
 version = "0.1.0"
 dependencies = [
  "anstyle",
